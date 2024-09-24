@@ -14,7 +14,7 @@ SERVER = false
 IDL.idl = CEtcd.idl
 COMMON.cpp =
 SOURCES.cpp = \
-	cliente.cpp
+	client.cpp
 
 BINDIR = ../bin
 IDLDIR = ../idl
