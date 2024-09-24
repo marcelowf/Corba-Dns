@@ -8,14 +8,13 @@ include $(ACE_ROOT)/include/makeinclude/platform_macros.GNU
 # Parâmetros:
 #
 
-PROJECT = servidor_conta
+PROJECT = cliente_servidor
 SERVER = true
 
-IDL.idl = Conta.idl
+IDL.idl = CEtcd.idl
 COMMON.cpp =
 SOURCES.cpp = \
-	ContaI.cpp \
-	servidor.cpp
+	CEtcdI.cpp \
 
 BINDIR = ../bin
 IDLDIR = ../idl
