@@ -1,0 +1,29 @@
+IDL_FILE = cetcd
+CLIENT = client
+SERVER = server
+OBJS = cetcdC.o cetcdS.o cetcd.o
+
+CXX = g++
+CXXFLAGS = -Wall -I. -fexceptions
+LIBS = -lTAO -lTAO_PortableServer -lACE
+
+$(CLIENT): $(CLIENT).o $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $(CLIENT) $(CLIENT).o $(OBJS) $(LIBS)
+
+$(SERVER): $(SERVER).o $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $(SERVER) $(SERVER).o $(OBJS) $(LIBS)
+
+$(IDL_FILE).h: $(IDL_FILE).idl
+	tao_idl $(IDL_FILE).idl
+
+cetcdC.o: cetcdC.cpp
+	$(CXX) $(CXXFLAGS) -c cetcdC.cpp
+
+cetcdS.o: cetcdS.cpp
+	$(CXX) $(CXXFLAGS) -c cetcdS.cpp
+
+cetcd.o: cetcd.cpp
+	$(CXX) $(CXXFLAGS) -c cetcd.cpp
+
+clean:
+	rm -f *.o $(CLIENT) $(SERVER) cetcdC.cpp cetcdS.cpp cetcd.h cetcdC.h cetcdS.h

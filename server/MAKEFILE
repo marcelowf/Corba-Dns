@@ -1,0 +1,20 @@
+IDL = cetcd
+CXX = g++
+CXXFLAGS = -Wall -O2
+LIBS = -lTAO_PI -lTAO -lCOSNAMESPACE  # Ajuste as bibliotecas conforme o seu ORB
+
+IDL_SOURCES = $(IDL)_skel.cpp $(IDL)_stub.cpp
+
+all: server
+
+server: server.o cetcd_impl.o $(IDL_SOURCES)
+	$(CXX) -o server server.o cetcd_impl.o $(IDL_SOURCES) $(LIBS)
+
+server.o: server.cpp
+	$(CXX) $(CXXFLAGS) -c server.cpp
+
+cetcd_impl.o: cetcd_impl.cpp
+	$(CXX) $(CXXFLAGS) -c cetcd_impl.cpp
+
+clean:
+	rm -f *.o server

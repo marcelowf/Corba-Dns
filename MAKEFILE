@@ -1,0 +1,44 @@
+IDL_DIR = idl
+CLIENT_DIR = cliente
+SERVER_DIR = servidor
+BIN_DIR = bin
+
+CLIENT = $(BIN_DIR)/client
+SERVER = $(BIN_DIR)/server
+
+IDL_FILE = $(IDL_DIR)/Conta
+OBJS = ContaC.o ContaS.o Conta.o
+
+CXX = g++
+CXXFLAGS = -Wall -I$(IDL_DIR) -fexceptions
+LIBS = -lTAO -lTAO_PortableServer -lACE
+
+all: $(CLIENT) $(SERVER)
+
+$(CLIENT): $(CLIENT_DIR)/client.o $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $(CLIENT) $(CLIENT_DIR)/client.o $(OBJS) $(LIBS)
+
+$(SERVER): $(SERVER_DIR)/server.o $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $(SERVER) $(SERVER_DIR)/server.o $(OBJS) $(LIBS)
+
+$(IDL_FILE).h: $(IDL_FILE).idl
+	tao_idl -Gstl $(IDL_FILE).idl
+	mv ContaC.cpp ContaS.cpp Conta.cpp ContaC.h ContaS.h Conta.h $(IDL_DIR)
+
+ContaC.o: $(IDL_DIR)/ContaC.cpp
+	$(CXX) $(CXXFLAGS) -c $(IDL_DIR)/ContaC.cpp
+
+ContaS.o: $(IDL_DIR)/ContaS.cpp
+	$(CXX) $(CXXFLAGS) -c $(IDL_DIR)/ContaS.cpp
+
+Conta.o: $(IDL_DIR)/Conta.cpp
+	$(CXX) $(CXXFLAGS) -c $(IDL_DIR)/Conta.cpp
+
+$(CLIENT_DIR)/client.o: $(CLIENT_DIR)/client.cpp $(IDL_FILE).h
+	$(CXX) $(CXXFLAGS) -c $(CLIENT_DIR)/client.cpp
+
+$(SERVER_DIR)/server.o: $(SERVER_DIR)/server.cpp $(IDL_FILE).h
+	$(CXX) $(CXXFLAGS) -c $(SERVER_DIR)/server.cpp
+
+clean:
+	rm -f $(CLIENT_DIR)/*.o $(SERVER_DIR)/*.o $(BIN_DIR)/* ContaC.o ContaS.o Conta.o
